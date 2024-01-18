@@ -7,19 +7,15 @@ const router = express.Router();
 
 //---------auth-controllers---//
 import {
+    postLogin,
     postSignup,
-    resendOtp,
-    signupVerify,
 } from '../controllers/authControllers.js';
 
 //-------------------------------------------------------------------------//
 
 //----------------------auth-----------------------//
-router.post('/signUp', postSignup);
-router.post('/verifySignup', signupVerify);
-router.post('/resendSignupOtp', resendOtp);
-// router.post('/login', postLogin);
+router.post('/signup', postSignup);
+router.post('/login', postLogin);
 // router.post('/logout', logout);
 
-
-export default router
+export default router;

@@ -6,6 +6,9 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,11 +16,15 @@ import {
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
+  private ngUnsubscribe = new Subject<void>();
   loginForm!: FormGroup;
   errMessage: string | null = null;
   loading: boolean = false;
 
-  constructor() {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
@@ -42,6 +49,23 @@ export class LoginComponent {
   }
   submitForm() {
     this.loading = true;
-    console.log(this.loginForm.value);
+    this.authService
+      .userLogin(this.loginForm.value)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => {
+          this.errMessage = null;
+          this.loading = false;
+          this.router.navigate(['/']);
+        },
+        error: (errMessage) => {
+          this.errMessage = errMessage;
+          this.loading = false;
+        },
+      });
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

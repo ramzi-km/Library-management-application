@@ -7,6 +7,9 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -14,11 +17,15 @@ import {
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent implements OnInit {
+  private ngUnsubscribe = new Subject<void>();
   signupForm!: FormGroup;
   errMessage: string | null = null;
   loading: boolean = false;
 
-  constructor() {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {
     this.signupForm = new FormGroup({
       name: new FormControl('', [
         Validators.required,
@@ -58,6 +65,24 @@ export class SignupComponent implements OnInit {
   }
   submitForm() {
     this.loading = true;
-    console.log(this.signupForm.value);
+    this.authService
+      .userRegister(this.signupForm.value)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => {
+          this.errMessage = null;
+          this.loading = false;
+          console.log(res);
+          this.router.navigate(['/']);
+        },
+        error: (errMessage) => {
+          this.errMessage = errMessage;
+          this.loading = false;
+        },
+      });
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
