@@ -3,11 +3,13 @@
     class="mx-auto flex h-screen flex-col items-center justify-center px-6 py-8"
   >
     <div
-      class="w-full max-w-md rounded-lg border-4 border-gray-900 bg-secondary shadow"
+      class="bg-secondary w-full max-w-md rounded-lg border-4 border-gray-900 shadow"
     >
       <div class="space-y-6 p-6">
-        <h1 class="text-2xl font-bold text-gray-900 text-center">Log into your account</h1>
-        <div class="alert alert-error relative my-3">
+        <h1 class="text-center text-2xl font-bold text-gray-900">
+          Log into your account
+        </h1>
+        <div *ngIf="errMessage" class="alert alert-error relative my-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -21,15 +23,20 @@
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             ></path>
           </svg>
-          <span>{{ "" }}</span>
+          <span>{{ errMessage }}</span>
           <button
             type="button"
             class="absolute right-2.5 top-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900"
+            (click)="errMessage = ''"
           >
             <i class="bx bx-x text-2xl"></i>
           </button>
         </div>
-        <form class="space-y-6">
+        <form
+          [formGroup]="loginForm"
+          (ngSubmit)="submitForm()"
+          class="space-y-6"
+        >
           <div>
             <label for="" class="mb-2 block text-sm font-medium text-gray-900">
               Your Email
@@ -39,8 +46,21 @@
               name="email"
               placeholder="example@gmail.com"
               class="input input-bordered w-full border-2 border-black"
-              ngModel
+              formControlName="email"
             />
+            <div
+              class="text-sm text-red-500"
+              *ngIf="
+                loginFormControls['email'].touched &&
+                loginFormControls['email'].invalid
+              "
+            >
+              <label *ngIf="loginFormControls['email'].errors?.['required']"
+                >email is required </label
+              ><label *ngIf="loginFormControls['email'].errors?.['email']"
+                >not a valid email</label
+              >
+            </div>
           </div>
           <div>
             <label for="" class="mb-2 block text-sm font-medium text-gray-900">
@@ -51,10 +71,47 @@
               name="password"
               placeholder="********"
               class="input input-bordered w-full border-2 border-black"
-              ngModel
+              formControlName="password"
             />
+            <div
+              class="text-sm text-red-500"
+              *ngIf="
+                loginFormControls['password'].touched &&
+                loginFormControls['password'].invalid
+              "
+            >
+              <label *ngIf="loginFormControls['password'].errors?.['required']"
+                >password is required </label
+              ><label
+                *ngIf="
+                  loginFormControls['password'].errors?.['noSpaceValidator']
+                "
+                >password will not contain spaces</label
+              >
+              <label
+                *ngIf="
+                  loginFormControls['password'].errors?.['minlength'] &&
+                  !loginFormControls['password'].errors?.['noSpaceValidator']
+                "
+                >password will contain atleast 6 characters</label
+              >
+              <label
+                *ngIf="
+                  loginFormControls['password'].errors?.['pattern'] &&
+                  !loginFormControls['password'].errors?.['noSpaceValidator'] &&
+                  !loginFormControls['password'].errors?.['minlength'] &&
+                  !loginFormControls['password'].errors?.['required']
+                "
+                >password will contain a number and a character</label
+              >
+            </div>
           </div>
-          <button class="btn btn-primary w-full text-white">Login</button>
+          <button
+            [disabled]="loginForm.invalid"
+            class="btn btn-primary w-full text-white"
+          >
+            Login
+          </button>
         </form>
       </div>
     </div>
