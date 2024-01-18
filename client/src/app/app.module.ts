@@ -3,16 +3,25 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HeaderComponent } from './components/shared_components/header/header.component';
+import { FooterComponent } from './components/shared_components/footer/footer.component';
+import { LoginComponent } from './components/shared_components/login/login.component';
+import { SignupComponent } from './components/shared_components/signup/signup.component';
+import { HomeComponent } from './components/user_components/home/home.component';
+import { ErrorComponent } from './components/shared_components/error/error.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeaderComponent,
+    FooterComponent,
+    LoginComponent,
+    SignupComponent,
+    HomeComponent,
+    ErrorComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  imports: [BrowserModule, AppRoutingModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,0 +1,63 @@
+<!-------------------- logout-modal  --------------------->
+<dialog id="logoutModal" class="modal">
+  <div class="modal-box bg-secondary w-5/6 max-w-sm p-4 md:h-auto">
+    <!-- Modal content -->
+    <div class="relative p-4 text-center sm:p-5">
+      <button
+        type="button"
+        class="absolute right-2.5 top-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <i class="fa-solid fa-right-from-bracket mb-2 text-4xl"></i>
+      <p class="text-textp mb-4">Are you sure you want to logout ?</p>
+      <div class="flex items-center justify-center space-x-4">
+        <button type="button" class="btn btn-success btn-outline btn-sm">
+          No, cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-error btn-sm bg-red-600 text-white"
+        >
+          Yes, I'm sure
+          <span
+            class="loading loading-spinner loading-sm ml-2 text-white"
+          ></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</dialog>
+<!-------------------- logout-modal-end  --------------------->
+<nav class="border-textp bg-secondary fixed top-0 z-20 w-full border-b">
+  <div class="navbar container mx-auto my-0 flex h-20 flex-row justify-between">
+    <div class="flex flex-row space-x-20">
+      <a class="flex items-center space-x-3" routerLink="/"
+        ><img
+          src="../../../../favicon.ico"
+          width="60px"
+          alt=""
+          class="rounded-full"
+        />
+        <h1 class="text-2xl font-bold">Library Manager</h1>
+      </a>
+    </div>
+
+    <ng-container>
+      <div class="mr-10 hidden flex-row space-x-5 md:flex">
+        <a
+          class="border-primary text-texts px-3 font-semibold"
+          routerLink="/login"
+          routerLinkActive="border-b-4"
+          >Login</a
+        >
+        <a
+          class="border-primary text-texts px-3 font-semibold"
+          routerLink="/signup"
+          routerLinkActive="border-b-4"
+          >Sign Up</a
+        >
+      </div>
+    </ng-container>
+  </div>
+</nav>

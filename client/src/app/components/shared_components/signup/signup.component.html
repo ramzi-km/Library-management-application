@@ -1,0 +1,103 @@
+<div class="mt-20"></div>
+<section class="bg-bgclr">
+  <div
+    class="mx-auto flex h-screen flex-col items-center justify-center px-6 py-8"
+  >
+    <div
+      class="bg-secondary w-full max-w-md rounded-lg border-4 border-gray-900 shadow"
+    >
+      <div class="space-y-6 p-6">
+        <h1 class="text-center text-2xl font-bold text-gray-900">
+          Create account
+        </h1>
+        <div class="alert alert-error relative my-3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="h-6 w-6 shrink-0 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <span>{{ "" }}</span>
+          <button
+            type="button"
+            class="absolute right-2.5 top-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900"
+          >
+            <i class="bx bx-x text-2xl"></i>
+          </button>
+        </div>
+        <form class="space-y-6">
+          <div>
+            <label for="" class="mb-2 block text-sm font-medium text-gray-900">
+              Your Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              placeholder="full name"
+              class="input input-bordered w-full border-2 border-black"
+              ngModel
+            />
+          </div>
+          <div>
+            <label for="" class="mb-2 block text-sm font-medium text-gray-900">
+              Your Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="example@gmail.com"
+              class="input input-bordered w-full border-2 border-black"
+              ngModel
+            />
+          </div>
+          <div>
+            <label for="" class="mb-2 block text-sm font-medium text-gray-900">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              placeholder="********"
+              class="input input-bordered w-full border-2 border-black"
+              ngModel
+            />
+          </div>
+          <div>
+            <label class="mb-2 block text-sm font-medium text-gray-900">
+              Role
+            </label>
+            <div class="flex">
+              <label class="label cursor-pointer">
+                <span class="label-text mr-2">user</span>
+                <input
+                  type="radio"
+                  name="role"
+                  class="radio checked:bg-blue-500"
+                  ngModel
+                  checked
+                />
+              </label>
+              <label class="label cursor-pointer">
+                <span class="label-text mr-2">admin </span>
+                <input
+                  type="radio"
+                  name="role"
+                  ngModel
+                  class="radio checked:bg-blue-500"
+                />
+              </label>
+            </div>
+          </div>
+          <button class="btn btn-primary w-full text-white">Signup</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
