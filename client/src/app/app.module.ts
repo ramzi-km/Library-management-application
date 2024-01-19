@@ -10,8 +10,9 @@ import { FooterComponent } from './components/shared_components/footer/footer.co
 import { HeaderComponent } from './components/shared_components/header/header.component';
 import { LoginComponent } from './components/shared_components/login/login.component';
 import { SignupComponent } from './components/shared_components/signup/signup.component';
-import { HomeComponent } from './components/user_components/home/home.component';
 
+import { AdminHomeComponent } from './components/admin_components/admin-home/admin-home.component';
+import { UserHomeComponent } from './components/user_components/home/user-home/user-home.component';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 
 @NgModule({
@@ -21,8 +22,9 @@ import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
     FooterComponent,
     LoginComponent,
     SignupComponent,
-    HomeComponent,
     ErrorComponent,
+    UserHomeComponent,
+    AdminHomeComponent,
   ],
   imports: [
     BrowserModule,

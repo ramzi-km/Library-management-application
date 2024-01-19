@@ -56,6 +56,7 @@ export class LoginComponent {
         next: (res) => {
           this.errMessage = null;
           this.loading = false;
+          this.authService.setUser({ ...res.user, loggedIn: true });
           this.router.navigate(['/']);
         },
         error: (errMessage) => {

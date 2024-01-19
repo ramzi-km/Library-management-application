@@ -84,3 +84,18 @@ export async function postLogin(req, res) {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+export async function logout(req, res) {
+  try {
+    res.cookie('userToken', '', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 0,
+    });
+    res.status(200).json({ message: 'success' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'internal server error' });
+  }
+}

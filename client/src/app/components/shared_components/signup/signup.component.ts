@@ -72,7 +72,7 @@ export class SignupComponent implements OnInit {
         next: (res) => {
           this.errMessage = null;
           this.loading = false;
-          console.log(res);
+          this.authService.setUser({ ...res.user, loggedIn: true });
           this.router.navigate(['/']);
         },
         error: (errMessage) => {

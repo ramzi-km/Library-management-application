@@ -8,6 +8,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, catchError, throwError } from 'rxjs';
+import { AuthService } from '../services/auth/auth.service';
 import { ErrorEventService } from '../services/error-event.service';
 
 @Injectable()
@@ -15,6 +16,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   constructor(
     private errorEventService: ErrorEventService,
     private router: Router,
+    private authService: AuthService,
   ) {}
 
   intercept(
@@ -33,6 +35,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         let errorMessage: string = error.error.message;
         if (error.status === 401) {
+          this.authService.setUser({ loggedIn: false });
         } else if (error.status === 403 || error.status === 404) {
           console.log(errorMessage);
         } else {
