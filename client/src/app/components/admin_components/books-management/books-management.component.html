@@ -1,0 +1,276 @@
+<div class="p-5">
+  <div class="flex w-full">
+    <button (click)="showAddBookModal()" class="btn ml-auto bg-green-500">
+      <i class="bx bx-plus-medical"></i> Add book
+    </button>
+  </div>
+
+  <!-- add book modal  -->
+  <dialog id="addBookModal" class="modal">
+    <form class="modal-box max-w-max bg-secondary text-textp">
+      <div class="my-4 text-center text-2xl font-semibold">
+        <p>Add Book</p>
+      </div>
+      <button
+        type="button"
+        (click)="closeAddBookModal()"
+        class="btn btn-circle btn-ghost btn-sm absolute right-4 top-4 text-2xl"
+      >
+        <i class="bx bxs-x-circle"></i>
+      </button>
+      <div *ngIf="addBookErrMessage" class="alert alert-error mt-3 flex h-10">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 shrink-0 stroke-current"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <span>{{ addBookErrMessage }}</span>
+      </div>
+
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Title</span>
+        </label>
+        <input
+          type="text"
+          placeholder="book title"
+          class="input input-bordered"
+          required
+        />
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Author</span>
+        </label>
+        <input
+          type="text"
+          placeholder="author name"
+          class="input input-bordered"
+          required
+        />
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Description</span>
+        </label>
+        <input
+          type="text"
+          placeholder="description"
+          class="input input-bordered"
+          required
+        />
+      </div>
+      <div class="flex flex-col md:flex-row md:space-x-3">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Genre</span>
+          </label>
+          <input
+            type="text"
+            placeholder="genre"
+            class="input input-bordered"
+            required
+          />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">ISBN</span>
+          </label>
+          <input
+            type="text"
+            placeholder="international standard book number"
+            class="input input-bordered"
+            required
+          />
+        </div>
+      </div>
+      <div class="flex flex-col md:flex-row md:space-x-3">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Quantity</span>
+          </label>
+          <input
+            type="number"
+            placeholder="available quantity"
+            class="input input-bordered"
+            required
+          />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Limit</span>
+          </label>
+          <input
+            type="number"
+            placeholder="borrow limit for a user"
+            class="input input-bordered"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-control mt-6">
+        <button type="submit" class="btn btn-primary text-textp">
+          Submit
+          <span
+            *ngIf="addBookLoading"
+            class="loading loading-spinner loading-sm mb-1 ml-5 text-textp"
+          ></span>
+        </button>
+      </div>
+    </form>
+  </dialog>
+  <!-- add book modal end  -->
+
+  <div class="mx-1 my-4">
+    <label
+      for="default-search"
+      class="sr-only mb-2 text-sm font-medium text-textg"
+      >Search</label
+    >
+    <div class="relative">
+      <form>
+        <div
+          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+        >
+          <svg
+            class="h-4 w-4 text-gray-500"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
+          </svg>
+        </div>
+        <input
+          type="text"
+          id="default-search"
+          class="block w-full rounded-lg border border-textg bg-secondary p-4 pl-10 text-sm text-textp focus:border-blue-500 focus:ring-blue-500"
+          placeholder="Search guide name, place..."
+        />
+        <button
+          type="submit"
+          class="absolute bottom-2.5 right-2.5 rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+        >
+          Search
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto rounded-xl">
+    <div
+      class="flex h-20 items-center justify-center bg-secondary text-2xl font-semibold"
+    >
+      No Books to display
+    </div>
+    <table class="table border border-textg bg-secondary text-textp">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th class="font-bold text-textp">N.O</th>
+          <th class="font-bold text-textp">Cover</th>
+          <th class="font-bold text-textp">Title</th>
+          <th class="font-bold text-textp">Author</th>
+          <th class="font-bold text-textp">ISBN</th>
+          <th class="font-bold text-textp">Quantity</th>
+          <th class="font-bold text-textp">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-container>
+          <tr>
+            <td>sdf</td>
+            <td>
+              <div class="avatar w-16">
+                <div class="mask mask-square h-14 w-14">
+                  <img src="../../../../favicon.ico" alt="Avatar" />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div>
+                <div class="font-medium">atomic habit</div>
+              </div>
+            </td>
+            <td>baf</td>
+            <td>dsdf</td>
+            <td>dfasf</td>
+            <th>
+              <ng-container>
+                <button
+                  class="btn btn-sm bg-primary text-gray-100 hover:bg-gray-200 hover:text-primary"
+                >
+                  <i class="fa-solid fa-unlock"></i> list
+                  <span
+                    class="loading loading-spinner loading-sm mb-1 ml-5"
+                  ></span>
+                </button>
+              </ng-container>
+              <ng-container>
+                <button
+                  class="btn btn-sm bg-red-600 text-gray-100 hover:bg-gray-200 hover:text-red-600"
+                >
+                  <i class="fa-solid fa-ban"></i> Unlist
+                  <span
+                    class="loading loading-spinner loading-sm mb-1 ml-5"
+                  ></span>
+                </button>
+              </ng-container>
+            </th>
+          </tr>
+        </ng-container>
+      </tbody>
+      <!-- foot -->
+      <tfoot>
+        <tr>
+          <th>N.O</th>
+          <th>Cover</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th>ISBN</th>
+          <th>Quantity</th>
+          <th>Actions</th>
+        </tr>
+      </tfoot>
+    </table>
+    <!-- <div class="flex items-center justify-center p-5">
+      <div class="join">
+        <button (click)="prevPage()" *ngIf="page > 0" class="btn join-item">
+          «
+        </button>
+        <button class="btn join-item">Page {{ page + 1 }}</button>
+        <button
+          (click)="nextPage()"
+          *ngIf="page < lastPage"
+          class="btn join-item"
+        >
+          »
+        </button>
+      </div>
+    </div> -->
+  </div>
+  <!-- <div *ngIf="loading">
+    <div
+      class="fixed inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-60 text-primary"
+    >
+      <span class="loading loading-infinity w-24"></span>
+    </div>
+  </div> -->
+</div>
