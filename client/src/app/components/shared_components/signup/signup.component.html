@@ -4,7 +4,7 @@
     class="mx-auto flex h-screen flex-col items-center justify-center px-6 py-8"
   >
     <div
-      class="bg-secondary w-full max-w-md rounded-lg border-4 border-gray-900 shadow"
+      class="w-full max-w-md rounded-lg border-4 border-gray-900 bg-secondary shadow"
     >
       <div class="space-y-6 p-6">
         <h1 class="text-center text-2xl font-bold text-gray-900">
@@ -170,9 +170,16 @@
             Signup
             <span
               *ngIf="loading"
-              class="loading loading-spinner loading-sm text-textp mb-1 ml-5"
+              class="loading loading-spinner loading-sm mb-1 ml-5 text-textp"
             ></span>
           </button>
+          <div class="flex w-full items-center justify-center">
+            <a
+              routerLink="/login"
+              class="link-hover link text-sm text-blue-500 sm:text-base"
+              >Already have an account? Login here</a
+            >
+          </div>
         </form>
       </div>
     </div>

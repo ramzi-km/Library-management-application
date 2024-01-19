@@ -1,4 +1,4 @@
-<div class="p-5">
+<div class="relative p-5">
   <div class="flex w-full">
     <button (click)="showAddBookModal()" class="btn ml-auto bg-green-500">
       <i class="bx bx-plus-medical"></i> Add book
@@ -7,7 +7,11 @@
 
   <!-- add book modal  -->
   <dialog id="addBookModal" class="modal">
-    <form class="modal-box max-w-max bg-secondary text-textp">
+    <form
+      [formGroup]="addBookForm"
+      (ngSubmit)="submitAddBookForm()"
+      class="modal-box max-w-max bg-secondary text-textp"
+    >
       <div class="my-4 text-center text-2xl font-semibold">
         <p>Add Book</p>
       </div>
@@ -43,8 +47,23 @@
           type="text"
           placeholder="book title"
           class="input input-bordered"
+          maxlength="70"
           required
+          formControlName="title"
         />
+        <div
+          class="text-sm text-red-500"
+          *ngIf="
+            addBookFormControls['title'].touched &&
+            addBookFormControls['title'].invalid
+          "
+        >
+          <label *ngIf="addBookFormControls['title'].errors?.['required']"
+            >title is required </label
+          ><label *ngIf="addBookFormControls['title'].errors?.['minlength']"
+            >title should be atleast 3 characters</label
+          >
+        </div>
       </div>
       <div class="form-control">
         <label class="label">
@@ -54,8 +73,23 @@
           type="text"
           placeholder="author name"
           class="input input-bordered"
+          maxlength="50"
           required
+          formControlName="author"
         />
+        <div
+          class="text-sm text-red-500"
+          *ngIf="
+            addBookFormControls['author'].touched &&
+            addBookFormControls['author'].invalid
+          "
+        >
+          <label *ngIf="addBookFormControls['author'].errors?.['required']"
+            >author is required </label
+          ><label *ngIf="addBookFormControls['author'].errors?.['minlength']"
+            >author name should be atleast 3 characters</label
+          >
+        </div>
       </div>
       <div class="form-control">
         <label class="label">
@@ -65,21 +99,26 @@
           type="text"
           placeholder="description"
           class="input input-bordered"
+          maxlength="250"
           required
+          formControlName="description"
         />
+        <div
+          class="text-sm text-red-500"
+          *ngIf="
+            addBookFormControls['description'].touched &&
+            addBookFormControls['description'].invalid
+          "
+        >
+          <label *ngIf="addBookFormControls['description'].errors?.['required']"
+            >description is required </label
+          ><label
+            *ngIf="addBookFormControls['description'].errors?.['minlength']"
+            >description should be atleast 5 characters</label
+          >
+        </div>
       </div>
       <div class="flex flex-col md:flex-row md:space-x-3">
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Genre</span>
-          </label>
-          <input
-            type="text"
-            placeholder="genre"
-            class="input input-bordered"
-            required
-          />
-        </div>
         <div class="form-control">
           <label class="label">
             <span class="label-text">ISBN</span>
@@ -89,10 +128,22 @@
             placeholder="international standard book number"
             class="input input-bordered"
             required
+            formControlName="isbn"
           />
+          <div
+            class="text-sm text-red-500"
+            *ngIf="
+              addBookFormControls['isbn'].touched &&
+              addBookFormControls['isbn'].invalid
+            "
+          >
+            <label *ngIf="addBookFormControls['isbn'].errors?.['required']"
+              >isbn is required </label
+            ><label *ngIf="addBookFormControls['isbn'].errors?.['minlength']"
+              >isbn should be atleast 5 characters</label
+            >
+          </div>
         </div>
-      </div>
-      <div class="flex flex-col md:flex-row md:space-x-3">
         <div class="form-control">
           <label class="label">
             <span class="label-text">Quantity</span>
@@ -101,9 +152,27 @@
             type="number"
             placeholder="available quantity"
             class="input input-bordered"
+            min="0"
             required
+            formControlName="quantityAvailable"
           />
+          <div
+            class="text-sm text-red-500"
+            *ngIf="
+              addBookFormControls['quantityAvailable'].touched &&
+              addBookFormControls['quantityAvailable'].invalid
+            "
+          >
+            <label
+              *ngIf="
+                addBookFormControls['quantityAvailable'].errors?.['required']
+              "
+              >quantity is required
+            </label>
+          </div>
         </div>
+      </div>
+      <div class="flex flex-col md:flex-row md:space-x-3">
         <div class="form-control">
           <label class="label">
             <span class="label-text">Limit</span>
@@ -112,13 +181,56 @@
             type="number"
             placeholder="borrow limit for a user"
             class="input input-bordered"
+            min="0"
             required
+            formControlName="borrowLimit"
           />
+          <div
+            class="text-sm text-red-500"
+            *ngIf="
+              addBookFormControls['borrowLimit'].touched &&
+              addBookFormControls['borrowLimit'].invalid
+            "
+          >
+            <label
+              *ngIf="addBookFormControls['borrowLimit'].errors?.['required']"
+              >limit is required
+            </label>
+          </div>
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Cover image</span>
+          </label>
+          <input
+            accept=".jpg,.jpeg,.png"
+            type="file"
+            #fileInput
+            style="display: none"
+            (change)="onFileSelected($event)"
+          />
+          <button
+            type="button"
+            class="btn btn-info w-auto"
+            (click)="fileInput.click()"
+          >
+            Choose file
+          </button>
+          <div class="text-sm text-red-500">
+            <label
+              *ngIf="addBookFormControls['coverImage'].errors?.['required']"
+              >cover image is required
+            </label>
+          </div>
         </div>
       </div>
 
       <div class="form-control mt-6">
-        <button type="submit" class="btn btn-primary text-textp">
+        <button
+          [disabled]="addBookForm.invalid"
+          type="submit"
+          class="btn btn-primary text-textp"
+        >
           Submit
           <span
             *ngIf="addBookLoading"
@@ -161,11 +273,11 @@
           type="text"
           id="default-search"
           class="block w-full rounded-lg border border-textg bg-secondary p-4 pl-10 text-sm text-textp focus:border-blue-500 focus:ring-blue-500"
-          placeholder="Search guide name, place..."
+          placeholder="Search book title, author..."
         />
         <button
           type="submit"
-          class="absolute bottom-2.5 right-2.5 rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          class="absolute bottom-2.5 right-2.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
         >
           Search
         </button>
@@ -175,11 +287,15 @@
 
   <div class="overflow-x-auto rounded-xl">
     <div
+      *ngIf="!books[0]"
       class="flex h-20 items-center justify-center bg-secondary text-2xl font-semibold"
     >
       No Books to display
     </div>
-    <table class="table border border-textg bg-secondary text-textp">
+    <table
+      *ngIf="books[0]"
+      class="table border border-textg bg-secondary text-textp"
+    >
       <!-- head -->
       <thead>
         <tr>
@@ -189,50 +305,37 @@
           <th class="font-bold text-textp">Author</th>
           <th class="font-bold text-textp">ISBN</th>
           <th class="font-bold text-textp">Quantity</th>
+          <th class="font-bold text-textp">Limit</th>
           <th class="font-bold text-textp">Actions</th>
         </tr>
       </thead>
 
       <tbody>
-        <ng-container>
+        <ng-container *ngFor="let book of books; let i = index">
           <tr>
-            <td>sdf</td>
+            <td>{{ i + 1 }}</td>
             <td>
               <div class="avatar w-16">
                 <div class="mask mask-square h-14 w-14">
-                  <img src="../../../../favicon.ico" alt="Avatar" />
+                  <img [src]="book.coverImage" alt="Avatar" />
                 </div>
               </div>
             </td>
             <td>
               <div>
-                <div class="font-medium">atomic habit</div>
+                <div class="font-medium">{{ book.title }}</div>
               </div>
             </td>
-            <td>baf</td>
-            <td>dsdf</td>
-            <td>dfasf</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.isbn }}</td>
+            <td>{{ book.quantityAvailable }}</td>
+            <td>{{ book.borrowLimit }}</td>
             <th>
-              <ng-container>
-                <button
-                  class="btn btn-sm bg-primary text-gray-100 hover:bg-gray-200 hover:text-primary"
-                >
-                  <i class="fa-solid fa-unlock"></i> list
-                  <span
-                    class="loading loading-spinner loading-sm mb-1 ml-5"
-                  ></span>
-                </button>
-              </ng-container>
-              <ng-container>
-                <button
-                  class="btn btn-sm bg-red-600 text-gray-100 hover:bg-gray-200 hover:text-red-600"
-                >
-                  <i class="fa-solid fa-ban"></i> Unlist
-                  <span
-                    class="loading loading-spinner loading-sm mb-1 ml-5"
-                  ></span>
-                </button>
-              </ng-container>
+              <button
+                class="btn btn-sm bg-blue-600 text-gray-100 hover:bg-gray-200 hover:text-blue-600"
+              >
+                <i class="bx bxs-edit"></i> Edit
+              </button>
             </th>
           </tr>
         </ng-container>
@@ -246,6 +349,7 @@
           <th>Author</th>
           <th>ISBN</th>
           <th>Quantity</th>
+          <th>Limit</th>
           <th>Actions</th>
         </tr>
       </tfoot>
@@ -266,11 +370,11 @@
       </div>
     </div> -->
   </div>
-  <!-- <div *ngIf="loading">
+  <div *ngIf="loading">
     <div
-      class="fixed inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-60 text-primary"
+      class="absolute inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-60 text-primary"
     >
-      <span class="loading loading-infinity w-24"></span>
+      <span class="loading loading-bars w-20"></span>
     </div>
-  </div> -->
+  </div>
 </div>

@@ -10,11 +10,11 @@ const bookSchema = new Schema(
       type: String,
       required: true,
     },
-    description: {
+    coverImage: {
       type: String,
       required: true,
     },
-    genre: {
+    description: {
       type: String,
       required: true,
     },

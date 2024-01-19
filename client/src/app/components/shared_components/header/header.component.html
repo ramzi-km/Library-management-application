@@ -50,38 +50,7 @@
       </a>
     </div>
 
-    <ng-container>
-      <div class="mr-10 hidden flex-row space-x-5 md:flex">
-        <a
-          class="border-primary px-3 font-semibold text-texts"
-          routerLink="/login"
-          routerLinkActive="border-b-4"
-          >Login</a
-        >
-        <a
-          class="border-primary px-3 font-semibold text-texts"
-          routerLink="/signup"
-          routerLinkActive="border-b-4"
-          >Sign Up</a
-        >
-      </div>
-    </ng-container>
-  </div>
-</nav>
-<nav class="fixed top-0 z-20 w-full border-b border-textp bg-secondary">
-  <div class="container navbar mx-auto my-0 flex h-20 flex-row justify-between">
-    <div class="flex flex-row space-x-20">
-      <a class="flex items-center space-x-3" routerLink="/"
-        ><img
-          src="../../../../favicon.ico"
-          width="60px"
-          alt=""
-          class="rounded-full"
-        />
-        <h1 class="text-2xl font-bold">Library Manager</h1>
-      </a>
-    </div>
-    <ng-container *ngIf="user$ | async as user">
+    <ng-container *ngIf="user$ | async as user; else guestNav">
       <ng-container *ngIf="user?.loggedIn; else guestNav">
         <div class="flex flex-row space-x-5">
           <div class="dropdown dropdown-end">
@@ -111,24 +80,23 @@
             </ul>
           </div>
         </div>
-        <!-- Mobile Menu -->
       </ng-container>
-      <ng-template #guestNav>
-        <div class="mr-10 flex flex-row space-x-5">
-          <a
-            class="border-primary px-3 font-semibold text-texts"
-            routerLink="/login"
-            routerLinkActive="border-b-4"
-            >Login</a
-          >
-          <a
-            class="border-primary px-3 font-semibold text-texts"
-            routerLink="/signup"
-            routerLinkActive="border-b-4"
-            >Sign Up</a
-          >
-        </div>
-      </ng-template>
     </ng-container>
+    <ng-template #guestNav>
+      <div class="mr-10 hidden flex-row space-x-5 md:flex">
+        <a
+          class="border-primary px-3 font-semibold text-texts"
+          routerLink="/login"
+          routerLinkActive="border-b-4"
+          >Login</a
+        >
+        <a
+          class="border-primary px-3 font-semibold text-texts"
+          routerLink="/signup"
+          routerLinkActive="border-b-4"
+          >Sign Up</a
+        >
+      </div>
+    </ng-template>
   </div>
 </nav>

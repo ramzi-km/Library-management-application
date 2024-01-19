@@ -9,7 +9,7 @@ import connectDb from './config/db.connection.js'
 const app = express()
 const PORT = process.env.PORT || 8000
 
-// import adminRouter from './routes/adminRouter.js'
+import adminRouter from './routes/adminRouter.js'
 import userRouter from './routes/userRouter.js'
 
 //connect to database
@@ -37,4 +37,4 @@ app.listen(PORT, () => {
 
 //route setup
 app.use('/', userRouter)
-// app.use('/admin', adminRouter)
+app.use('/admin', adminRouter)
