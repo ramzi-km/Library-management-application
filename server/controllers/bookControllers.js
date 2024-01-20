@@ -68,3 +68,61 @@ export async function addBook(req, res) {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+export async function editBook(req, res) {
+  try {
+    const {
+      title,
+      author,
+      description,
+      coverImage,
+      quantityAvailable,
+      borrowLimit,
+      isbn,
+    } = req.body;
+    const bookId = req.params.bookId;
+    const findBook = await bookModel.findById(bookId);
+
+    if (!findBook) {
+      return res.status(404).json({ message: "Book doesn't exist" });
+    }
+    if (
+      !title ||
+      !author ||
+      !description ||
+      !coverImage ||
+      !quantityAvailable ||
+      !borrowLimit ||
+      !isbn
+    ) {
+      return res.status(422).json({ message: 'All fields are required' });
+    }
+
+    const updatedBookData = {
+      title: title.toLowerCase(),
+      author,
+      description,
+      quantityAvailable,
+      borrowLimit,
+      isbn,
+      coverImage:
+        findBook.coverImage === coverImage
+          ? coverImage
+          : (
+              await cloudinary.uploader.upload(coverImage, {
+                folder: 'libraryManager',
+              })
+            ).secure_url,
+    };
+
+    const updatedBook = await bookModel.findByIdAndUpdate(
+      bookId,
+      updatedBookData,
+      { new: true, runValidators: true }
+    );
+
+    return res.status(200).json({ book: updatedBook });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}

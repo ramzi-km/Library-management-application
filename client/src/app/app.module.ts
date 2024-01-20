@@ -15,6 +15,7 @@ import { AdminHomeComponent } from './components/admin_components/admin-home/adm
 import { UserHomeComponent } from './components/user_components/home/user-home/user-home.component';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { BooksManagementComponent } from './components/admin_components/books-management/books-management.component';
+import { ListBooksComponent } from './components/user_components/list-books/list-books.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { BooksManagementComponent } from './components/admin_components/books-ma
     UserHomeComponent,
     AdminHomeComponent,
     BooksManagementComponent,
+    ListBooksComponent,
   ],
   imports: [
     BrowserModule,

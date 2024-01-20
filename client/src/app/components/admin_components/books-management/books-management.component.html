@@ -5,243 +5,6 @@
     </button>
   </div>
 
-  <!-- add book modal  -->
-  <dialog id="addBookModal" class="modal">
-    <form
-      [formGroup]="addBookForm"
-      (ngSubmit)="submitAddBookForm()"
-      class="modal-box max-w-max bg-secondary text-textp"
-    >
-      <div class="my-4 text-center text-2xl font-semibold">
-        <p>Add Book</p>
-      </div>
-      <button
-        type="button"
-        (click)="closeAddBookModal()"
-        class="btn btn-circle btn-ghost btn-sm absolute right-4 top-4 text-2xl"
-      >
-        <i class="bx bxs-x-circle"></i>
-      </button>
-      <div *ngIf="addBookErrMessage" class="alert alert-error mt-3 flex h-10">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 shrink-0 stroke-current"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-        <span>{{ addBookErrMessage }}</span>
-      </div>
-
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">Title</span>
-        </label>
-        <input
-          type="text"
-          placeholder="book title"
-          class="input input-bordered"
-          maxlength="70"
-          required
-          formControlName="title"
-        />
-        <div
-          class="text-sm text-red-500"
-          *ngIf="
-            addBookFormControls['title'].touched &&
-            addBookFormControls['title'].invalid
-          "
-        >
-          <label *ngIf="addBookFormControls['title'].errors?.['required']"
-            >title is required </label
-          ><label *ngIf="addBookFormControls['title'].errors?.['minlength']"
-            >title should be atleast 3 characters</label
-          >
-        </div>
-      </div>
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">Author</span>
-        </label>
-        <input
-          type="text"
-          placeholder="author name"
-          class="input input-bordered"
-          maxlength="50"
-          required
-          formControlName="author"
-        />
-        <div
-          class="text-sm text-red-500"
-          *ngIf="
-            addBookFormControls['author'].touched &&
-            addBookFormControls['author'].invalid
-          "
-        >
-          <label *ngIf="addBookFormControls['author'].errors?.['required']"
-            >author is required </label
-          ><label *ngIf="addBookFormControls['author'].errors?.['minlength']"
-            >author name should be atleast 3 characters</label
-          >
-        </div>
-      </div>
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">Description</span>
-        </label>
-        <input
-          type="text"
-          placeholder="description"
-          class="input input-bordered"
-          maxlength="250"
-          required
-          formControlName="description"
-        />
-        <div
-          class="text-sm text-red-500"
-          *ngIf="
-            addBookFormControls['description'].touched &&
-            addBookFormControls['description'].invalid
-          "
-        >
-          <label *ngIf="addBookFormControls['description'].errors?.['required']"
-            >description is required </label
-          ><label
-            *ngIf="addBookFormControls['description'].errors?.['minlength']"
-            >description should be atleast 5 characters</label
-          >
-        </div>
-      </div>
-      <div class="flex flex-col md:flex-row md:space-x-3">
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">ISBN</span>
-          </label>
-          <input
-            type="text"
-            placeholder="international standard book number"
-            class="input input-bordered"
-            required
-            formControlName="isbn"
-          />
-          <div
-            class="text-sm text-red-500"
-            *ngIf="
-              addBookFormControls['isbn'].touched &&
-              addBookFormControls['isbn'].invalid
-            "
-          >
-            <label *ngIf="addBookFormControls['isbn'].errors?.['required']"
-              >isbn is required </label
-            ><label *ngIf="addBookFormControls['isbn'].errors?.['minlength']"
-              >isbn should be atleast 5 characters</label
-            >
-          </div>
-        </div>
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Quantity</span>
-          </label>
-          <input
-            type="number"
-            placeholder="available quantity"
-            class="input input-bordered"
-            min="0"
-            required
-            formControlName="quantityAvailable"
-          />
-          <div
-            class="text-sm text-red-500"
-            *ngIf="
-              addBookFormControls['quantityAvailable'].touched &&
-              addBookFormControls['quantityAvailable'].invalid
-            "
-          >
-            <label
-              *ngIf="
-                addBookFormControls['quantityAvailable'].errors?.['required']
-              "
-              >quantity is required
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col md:flex-row md:space-x-3">
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Limit</span>
-          </label>
-          <input
-            type="number"
-            placeholder="borrow limit for a user"
-            class="input input-bordered"
-            min="0"
-            required
-            formControlName="borrowLimit"
-          />
-          <div
-            class="text-sm text-red-500"
-            *ngIf="
-              addBookFormControls['borrowLimit'].touched &&
-              addBookFormControls['borrowLimit'].invalid
-            "
-          >
-            <label
-              *ngIf="addBookFormControls['borrowLimit'].errors?.['required']"
-              >limit is required
-            </label>
-          </div>
-        </div>
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Cover image</span>
-          </label>
-          <input
-            accept=".jpg,.jpeg,.png"
-            type="file"
-            #fileInput
-            style="display: none"
-            (change)="onFileSelected($event)"
-          />
-          <button
-            type="button"
-            class="btn btn-info w-auto"
-            (click)="fileInput.click()"
-          >
-            Choose file
-          </button>
-          <div class="text-sm text-red-500">
-            <label
-              *ngIf="addBookFormControls['coverImage'].errors?.['required']"
-              >cover image is required
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-control mt-6">
-        <button
-          [disabled]="addBookForm.invalid"
-          type="submit"
-          class="btn btn-primary text-textp"
-        >
-          Submit
-          <span
-            *ngIf="addBookLoading"
-            class="loading loading-spinner loading-sm mb-1 ml-5 text-textp"
-          ></span>
-        </button>
-      </div>
-    </form>
-  </dialog>
-  <!-- add book modal end  -->
-
   <div class="mx-1 my-4">
     <label
       for="default-search"
@@ -333,6 +96,7 @@
             <th>
               <button
                 class="btn btn-sm bg-blue-600 text-gray-100 hover:bg-gray-200 hover:text-blue-600"
+                (click)="showEditBookModal(book)"
               >
                 <i class="bx bxs-edit"></i> Edit
               </button>
@@ -378,3 +142,473 @@
     </div>
   </div>
 </div>
+
+<!-- add book modal  -->
+<dialog id="addBookModal" class="modal">
+  <form
+    [formGroup]="addBookForm"
+    (ngSubmit)="submitAddBookForm()"
+    class="modal-box max-w-max bg-secondary text-textp"
+  >
+    <div class="my-4 text-center text-2xl font-semibold">
+      <p>Add Book</p>
+    </div>
+    <button
+      type="button"
+      (click)="closeAddBookModal()"
+      class="btn btn-circle btn-ghost btn-sm absolute right-4 top-4 text-2xl"
+    >
+      <i class="bx bxs-x-circle"></i>
+    </button>
+    <div *ngIf="addBookErrMessage" class="alert alert-error mt-3 flex h-10">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 shrink-0 stroke-current"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span>{{ addBookErrMessage }}</span>
+    </div>
+
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Title</span>
+      </label>
+      <input
+        type="text"
+        placeholder="book title"
+        class="input input-bordered"
+        maxlength="70"
+        required
+        formControlName="title"
+      />
+      <div
+        class="text-sm text-red-500"
+        *ngIf="
+          addBookFormControls['title'].touched &&
+          addBookFormControls['title'].invalid
+        "
+      >
+        <label *ngIf="addBookFormControls['title'].errors?.['required']"
+          >title is required </label
+        ><label *ngIf="addBookFormControls['title'].errors?.['minlength']"
+          >title should be atleast 3 characters</label
+        >
+      </div>
+    </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Author</span>
+      </label>
+      <input
+        type="text"
+        placeholder="author name"
+        class="input input-bordered"
+        maxlength="50"
+        required
+        formControlName="author"
+      />
+      <div
+        class="text-sm text-red-500"
+        *ngIf="
+          addBookFormControls['author'].touched &&
+          addBookFormControls['author'].invalid
+        "
+      >
+        <label *ngIf="addBookFormControls['author'].errors?.['required']"
+          >author is required </label
+        ><label *ngIf="addBookFormControls['author'].errors?.['minlength']"
+          >author name should be atleast 3 characters</label
+        >
+      </div>
+    </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Description</span>
+      </label>
+      <input
+        type="text"
+        placeholder="description"
+        class="input input-bordered"
+        maxlength="250"
+        required
+        formControlName="description"
+      />
+      <div
+        class="text-sm text-red-500"
+        *ngIf="
+          addBookFormControls['description'].touched &&
+          addBookFormControls['description'].invalid
+        "
+      >
+        <label *ngIf="addBookFormControls['description'].errors?.['required']"
+          >description is required </label
+        ><label *ngIf="addBookFormControls['description'].errors?.['minlength']"
+          >description should be atleast 5 characters</label
+        >
+      </div>
+    </div>
+    <div class="flex flex-col md:flex-row md:space-x-3">
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">ISBN</span>
+        </label>
+        <input
+          type="text"
+          placeholder="international standard book number"
+          class="input input-bordered"
+          required
+          formControlName="isbn"
+        />
+        <div
+          class="text-sm text-red-500"
+          *ngIf="
+            addBookFormControls['isbn'].touched &&
+            addBookFormControls['isbn'].invalid
+          "
+        >
+          <label *ngIf="addBookFormControls['isbn'].errors?.['required']"
+            >isbn is required </label
+          ><label *ngIf="addBookFormControls['isbn'].errors?.['minlength']"
+            >isbn should be atleast 5 characters</label
+          >
+        </div>
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Quantity</span>
+        </label>
+        <input
+          type="number"
+          placeholder="available quantity"
+          class="input input-bordered"
+          min="0"
+          required
+          formControlName="quantityAvailable"
+        />
+        <div
+          class="text-sm text-red-500"
+          *ngIf="
+            addBookFormControls['quantityAvailable'].touched &&
+            addBookFormControls['quantityAvailable'].invalid
+          "
+        >
+          <label
+            *ngIf="
+              addBookFormControls['quantityAvailable'].errors?.['required']
+            "
+            >quantity is required
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col md:flex-row md:space-x-3">
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Limit</span>
+        </label>
+        <input
+          type="number"
+          placeholder="borrow limit for a user"
+          class="input input-bordered"
+          min="0"
+          required
+          formControlName="borrowLimit"
+        />
+        <div
+          class="text-sm text-red-500"
+          *ngIf="
+            addBookFormControls['borrowLimit'].touched &&
+            addBookFormControls['borrowLimit'].invalid
+          "
+        >
+          <label *ngIf="addBookFormControls['borrowLimit'].errors?.['required']"
+            >limit is required
+          </label>
+        </div>
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Cover image</span>
+        </label>
+        <input
+          accept=".jpg,.jpeg,.png"
+          type="file"
+          #fileInput
+          style="display: none"
+          (change)="onFileSelected($event)"
+        />
+        <button
+          type="button"
+          class="btn btn-info w-auto"
+          (click)="fileInput.click()"
+        >
+          Choose file
+        </button>
+        <div class="text-sm text-red-500">
+          <label *ngIf="addBookFormControls['coverImage'].errors?.['required']"
+            >cover image is required
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-control mt-6">
+      <button
+        [disabled]="addBookForm.invalid"
+        type="submit"
+        class="btn btn-primary text-textp"
+      >
+        Submit
+        <span
+          *ngIf="addBookLoading"
+          class="loading loading-spinner loading-sm mb-1 ml-5 text-textp"
+        ></span>
+      </button>
+    </div>
+  </form>
+</dialog>
+<!-- add book modal end  -->
+
+<!-- edit book modal  -->
+<dialog id="editBookModal" class="modal">
+  <form
+    [formGroup]="editBookForm"
+    (ngSubmit)="submitEditBookForm()"
+    class="modal-box max-w-max bg-secondary text-textp"
+  >
+    <div class="my-4 text-center text-2xl font-semibold">
+      <p>Edit Book</p>
+    </div>
+    <button
+      type="button"
+      (click)="closeEditBookModal()"
+      class="btn btn-circle btn-ghost btn-sm absolute right-4 top-4 text-2xl"
+    >
+      <i class="bx bxs-x-circle"></i>
+    </button>
+    <div *ngIf="editBookErrMessage" class="alert alert-error mt-3 flex h-10">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 shrink-0 stroke-current"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span>{{ editBookErrMessage }}</span>
+    </div>
+
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Title</span>
+      </label>
+      <input
+        type="text"
+        placeholder="book title"
+        class="input input-bordered"
+        maxlength="70"
+        required
+        formControlName="title"
+      />
+      <div
+        class="text-sm text-red-500"
+        *ngIf="
+          editBookFormControls['title'].touched &&
+          editBookFormControls['title'].invalid
+        "
+      >
+        <label *ngIf="editBookFormControls['title'].errors?.['required']"
+          >title is required </label
+        ><label *ngIf="editBookFormControls['title'].errors?.['minlength']"
+          >title should be atleast 3 characters</label
+        >
+      </div>
+    </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Author</span>
+      </label>
+      <input
+        type="text"
+        placeholder="author name"
+        class="input input-bordered"
+        maxlength="50"
+        required
+        formControlName="author"
+      />
+      <div
+        class="text-sm text-red-500"
+        *ngIf="
+          editBookFormControls['author'].touched &&
+          editBookFormControls['author'].invalid
+        "
+      >
+        <label *ngIf="editBookFormControls['author'].errors?.['required']"
+          >author is required </label
+        ><label *ngIf="editBookFormControls['author'].errors?.['minlength']"
+          >author name should be atleast 3 characters</label
+        >
+      </div>
+    </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Description</span>
+      </label>
+      <input
+        type="text"
+        placeholder="description"
+        class="input input-bordered"
+        maxlength="250"
+        required
+        formControlName="description"
+      />
+      <div
+        class="text-sm text-red-500"
+        *ngIf="
+          editBookFormControls['description'].touched &&
+          editBookFormControls['description'].invalid
+        "
+      >
+        <label *ngIf="editBookFormControls['description'].errors?.['required']"
+          >description is required </label
+        ><label
+          *ngIf="editBookFormControls['description'].errors?.['minlength']"
+          >description should be atleast 5 characters</label
+        >
+      </div>
+    </div>
+    <div class="flex flex-col md:flex-row md:space-x-3">
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">ISBN</span>
+        </label>
+        <input
+          type="text"
+          placeholder="international standard book number"
+          class="input input-bordered"
+          required
+          formControlName="isbn"
+        />
+        <div
+          class="text-sm text-red-500"
+          *ngIf="
+            editBookFormControls['isbn'].touched &&
+            editBookFormControls['isbn'].invalid
+          "
+        >
+          <label *ngIf="editBookFormControls['isbn'].errors?.['required']"
+            >isbn is required </label
+          ><label *ngIf="editBookFormControls['isbn'].errors?.['minlength']"
+            >isbn should be atleast 5 characters</label
+          >
+        </div>
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Quantity</span>
+        </label>
+        <input
+          type="number"
+          placeholder="available quantity"
+          class="input input-bordered"
+          min="0"
+          required
+          formControlName="quantityAvailable"
+        />
+        <div
+          class="text-sm text-red-500"
+          *ngIf="
+            editBookFormControls['quantityAvailable'].touched &&
+            editBookFormControls['quantityAvailable'].invalid
+          "
+        >
+          <label
+            *ngIf="
+              editBookFormControls['quantityAvailable'].errors?.['required']
+            "
+            >quantity is required
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col md:flex-row md:space-x-3">
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Limit</span>
+        </label>
+        <input
+          type="number"
+          placeholder="borrow limit for a user"
+          class="input input-bordered"
+          min="0"
+          required
+          formControlName="borrowLimit"
+        />
+        <div
+          class="text-sm text-red-500"
+          *ngIf="
+            editBookFormControls['borrowLimit'].touched &&
+            editBookFormControls['borrowLimit'].invalid
+          "
+        >
+          <label
+            *ngIf="editBookFormControls['borrowLimit'].errors?.['required']"
+            >limit is required
+          </label>
+        </div>
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Cover image</span>
+        </label>
+        <input
+          accept=".jpg,.jpeg,.png"
+          type="file"
+          #editFileInput
+          style="display: none"
+          (change)="onEditBookFileSelected($event)"
+        />
+        <button
+          type="button"
+          class="btn btn-info w-auto"
+          (click)="editFileInput.click()"
+        >
+          Choose file
+        </button>
+        <div class="text-sm text-red-500">
+          <label *ngIf="editBookFormControls['coverImage'].errors?.['required']"
+            >cover image is required
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-control mt-6">
+      <button
+        [disabled]="editBookForm.invalid"
+        type="submit"
+        class="btn btn-primary text-textp"
+      >
+        Submit
+        <span
+          *ngIf="editBookLoading"
+          class="loading loading-spinner loading-sm mb-1 ml-5 text-textp"
+        ></span>
+      </button>
+    </div>
+  </form>
+</dialog>
+<!-- add book modal end  -->

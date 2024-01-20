@@ -18,4 +18,10 @@ export class BookService {
       book,
     );
   }
+  editBook(book: Book, bookId: string) {
+    return this.http.put<{ book: Book }>(
+      `${this.baseUrl}/admin/book/${bookId}/edit`,
+      book,
+    );
+  }
 }
