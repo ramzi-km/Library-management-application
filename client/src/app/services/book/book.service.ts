@@ -24,4 +24,11 @@ export class BookService {
       book,
     );
   }
+
+  borrowBook(bookId: string, body: { borrowQuantity: number }) {
+    return this.http.post<{ borrowedBook: Book }>(
+      `${this.baseUrl}/book/${bookId}/borrow`,
+      body,
+    );
+  }
 }

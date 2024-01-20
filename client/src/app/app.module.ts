@@ -16,6 +16,7 @@ import { UserHomeComponent } from './components/user_components/home/user-home/u
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { BooksManagementComponent } from './components/admin_components/books-management/books-management.component';
 import { ListBooksComponent } from './components/user_components/list-books/list-books.component';
+import { ListBorrowedBooksComponent } from './components/user_components/list-borrowed-books/list-borrowed-books.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { ListBooksComponent } from './components/user_components/list-books/list
     AdminHomeComponent,
     BooksManagementComponent,
     ListBooksComponent,
+    ListBorrowedBooksComponent,
   ],
   imports: [
     BrowserModule,

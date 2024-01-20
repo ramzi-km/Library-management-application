@@ -1,12 +1,23 @@
 <div class="mt-20"></div>
 <div class="container py-10 sm:mx-auto md:px-32">
   <div role="tablist" class="tabs tabs-bordered">
-    <a role="tab" class="tab tab-active text-xs font-semibold sm:text-base"
+    <a
+      role="tab"
+      class="tab text-xs font-semibold sm:text-base"
+      (click)="currentTab = 'allBooks'"
+      [class.tab-active]="currentTab === 'allBooks'"
       >All books</a
     >
-    <a role="tab" class="tab text-xs font-semibold sm:text-base"
+    <a
+      role="tab"
+      (click)="currentTab = 'borrowedBooks'"
+      class="tab text-xs font-semibold sm:text-base"
+      [class.tab-active]="currentTab === 'borrowedBooks'"
       >Borrowed books</a
     >
   </div>
-  <app-list-books></app-list-books>
+  <app-list-books *ngIf="currentTab == 'allBooks'"></app-list-books>
+  <app-list-borrowed-books
+    *ngIf="currentTab == 'borrowedBooks'"
+  ></app-list-borrowed-books>
 </div>

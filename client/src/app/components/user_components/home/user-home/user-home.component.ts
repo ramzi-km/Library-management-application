@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./user-home.component.scss']
 })
 export class UserHomeComponent {
-
+  currentTab='allBooks'
 }

@@ -19,7 +19,8 @@ import { getUserData } from '../controllers/userControllers.js';
 
 //---------book-controllers---//
 
-import { getAllBooks } from '../controllers/bookControllers.js';
+import { borrowBook, getAllBooks } from '../controllers/bookControllers.js';
+import roleCheck from '../middlewares/roleCheck.js';
 
 //-------------------------------------------------------------------------//
 
@@ -33,5 +34,6 @@ router.get('/user', verifyUser, getUserData);
 
 //----------------------book----------------------//
 router.get('/books', verifyUser, getAllBooks);
+router.post('/book/:bookId/borrow', verifyUser, roleCheck('user'), borrowBook);
 
 export default router;

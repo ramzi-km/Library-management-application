@@ -6,6 +6,6 @@ export interface Book {
   description?: string;
   genre?: string;
   isbn?: string;
-  quantityAvailable?: Number;
-  borrowLimit?: Number;
+  quantityAvailable?: number;
+  borrowLimit?: number;
 }

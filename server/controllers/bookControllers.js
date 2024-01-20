@@ -1,6 +1,9 @@
+import mongoose from 'mongoose';
 import cloudinary from '../config/cloudinary.js';
 //-------------------models-------------------//
 import bookModel from '../models/bookModel.js';
+import transactionModel from '../models/transactionModel.js';
+import userModel from '../models/userModel.js';
 
 export async function getAllBooks(req, res) {
   try {
@@ -34,9 +37,9 @@ export async function addBook(req, res) {
     ) {
       return res.status(422).json({ message: 'Provide necessary information' });
     }
-    const lowercaseTitle = title.toLowerCase();
+    const upperCaseTitle = title.toUpperCase();
     const findBook = await bookModel.findOne({
-      $or: [{ title: lowercaseTitle }, { isbn }],
+      $or: [{ title: upperCaseTitle }, { isbn }],
     });
 
     if (findBook) {
@@ -46,7 +49,7 @@ export async function addBook(req, res) {
         folder: 'libraryManager',
       });
       const book = new bookModel({
-        title: lowercaseTitle,
+        title: upperCaseTitle,
         author,
         description,
         coverImage: coverPhoto.secure_url,
@@ -98,7 +101,7 @@ export async function editBook(req, res) {
     }
 
     const updatedBookData = {
-      title: title.toLowerCase(),
+      title: title.toUpperCase(),
       author,
       description,
       quantityAvailable,
@@ -124,5 +127,62 @@ export async function editBook(req, res) {
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export async function borrowBook(req, res) {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const userId = req.user._id.toString();
+    const bookId = req.params.bookId;
+    const { borrowQuantity } = req.body;
+    const book = await bookModel.findById(bookId);
+    if (!book) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+    if (book.quantityAvailable <= 0) {
+      return res
+        .status(400)
+        .json({ message: 'Book is not currently available for borrowing' });
+    }
+    const userBorrowCount = await transactionModel.countDocuments({
+      _id: userId,
+      status: 'borrowed',
+    });
+    if (userBorrowCount >= 5) {
+      return res
+        .status(400)
+        .json({ message: 'User has reached borrowing limit' });
+    }
+    if (borrowQuantity >= book.borrowLimit) {
+      return res.status(400).json({
+        message: `borrowing limit for this book is ${book.borrowLimit}`,
+      });
+    }
+    const borrowDate = new Date();
+    const newTransaction = new transactionModel({
+      userId,
+      bookId,
+      borrowDate,
+      borrowQuantity,
+      status: 'borrowed',
+    });
+    await newTransaction.save();
+
+    book.quantityAvailable -= borrowQuantity;
+    await book.save();
+    await session.commitTransaction();
+    console.log(newTransaction);
+    return res.status(200).json({
+      message: 'Book borrowed successfully',
+      transaction: newTransaction,
+    });
+  } catch (error) {
+    await session.abortTransaction();
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  } finally {
+    session.endSession();
   }
 }
