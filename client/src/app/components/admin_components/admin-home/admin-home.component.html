@@ -1,13 +1,25 @@
 <div class="mt-20"></div>
 <div class="container py-10 sm:mx-auto md:px-32">
   <div role="tablist" class="tabs-boxed tabs">
-    <a role="tab" class="tab text-xs font-semibold sm:text-base"
+    <a
+      role="tab"
+      (click)="currentTab = 'booksManagement'"
+      [class.tab-active]="currentTab === 'booksManagement'"
+      class="tab text-xs font-semibold sm:text-base"
       >Book management</a
     >
-    <a role="tab" class="tab tab-active text-xs font-semibold sm:text-base"
+    <a
+      role="tab"
+      (click)="currentTab = 'transactions'"
+      [class.tab-active]="currentTab === 'transactions'"
+      class="tab text-xs font-semibold sm:text-base"
       >Transactions</a
     >
-    <a role="tab" class="tab text-xs font-semibold sm:text-base"
+    <a
+      role="tab"
+      (click)="currentTab = 'userManagement'"
+      [class.tab-active]="currentTab === 'userManagement'"
+      class="tab text-xs font-semibold sm:text-base"
       >User management</a
     >
   </div>

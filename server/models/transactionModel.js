@@ -34,4 +34,4 @@ const transactionSchema = new Schema(
   { timestamps: true }
 );
 
-export default model('transaction', transactionSchema);
+export default model('Transaction', transactionSchema);

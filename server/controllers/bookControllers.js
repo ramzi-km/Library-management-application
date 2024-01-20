@@ -173,7 +173,6 @@ export async function borrowBook(req, res) {
     book.quantityAvailable -= borrowQuantity;
     await book.save();
     await session.commitTransaction();
-    console.log(newTransaction);
     return res.status(200).json({
       message: 'Book borrowed successfully',
       transaction: newTransaction,

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Book } from 'src/app/interfaces/book';
+import { Transaction } from 'src/app/interfaces/transaction';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -29,6 +30,12 @@ export class BookService {
     return this.http.post<{ borrowedBook: Book }>(
       `${this.baseUrl}/book/${bookId}/borrow`,
       body,
+    );
+  }
+
+  getBorrowedBooks() {
+    return this.http.get<{ borrowedBooks: Transaction[] }>(
+      `${this.baseUrl}/books/borrowed`,
     );
   }
 }

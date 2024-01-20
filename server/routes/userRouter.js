@@ -15,7 +15,10 @@ import {
 
 //---------user-controllers---//
 
-import { getUserData } from '../controllers/userControllers.js';
+import {
+    getBorrowedBooks,
+    getUserData,
+} from '../controllers/userControllers.js';
 
 //---------book-controllers---//
 
@@ -34,6 +37,7 @@ router.get('/user', verifyUser, getUserData);
 
 //----------------------book----------------------//
 router.get('/books', verifyUser, getAllBooks);
+router.get('/books/borrowed', verifyUser, roleCheck('user'), getBorrowedBooks);
 router.post('/book/:bookId/borrow', verifyUser, roleCheck('user'), borrowBook);
 
 export default router;

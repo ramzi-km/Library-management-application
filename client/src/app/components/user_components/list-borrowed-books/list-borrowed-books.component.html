@@ -1,1 +1,55 @@
-<p>list-borrowed-books works!</p>
+<div
+  *ngIf="!borrowedBooks[0]"
+  class="relative flex min-h-[20rem] w-full items-center justify-center"
+>
+  <div *ngIf="loading">
+    <div
+      class="absolute inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-80 text-primary"
+    >
+      <span class="loading loading-bars w-20"></span>
+    </div>
+  </div>
+  <div *ngIf="!borrowedBooks[0]" class="mb-10">
+    <!-- <img
+      class="w-1/2 md:w-1/3"
+      src="../../../../../assets/images/noTrips-removebg.png"
+    /> -->
+    <h1 class="text-center text-xl text-textp">No borrowed books currently!</h1>
+  </div>
+</div>
+<div class="min-h-screen">
+  <ul
+    *ngIf="borrowedBooks[0]"
+    class="mx-auto mt-16 w-full overflow-hidden bg-secondary shadow sm:rounded-md"
+  >
+    <li
+      *ngFor="let borrowedBook of borrowedBooks; let bookIndex = index"
+      class="border-b border-gray-200"
+    >
+      <div class="px-4 py-5 sm:px-6">
+        <img
+          class="h-16 w-12"
+          [src]="borrowedBook.book?.coverImage"
+          alt="cover image"
+        />
+
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-medium leading-6 text-gray-900">
+            {{ borrowedBook.book?.title }}
+          </h3>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500">
+            Borrowed on: {{ borrowedBook.borrowDate | date }}
+          </p>
+        </div>
+        <div class="mt-2 flex items-center justify-between">
+          <p class="text-sm font-medium text-gray-500">
+            Quantity: {{ borrowedBook.borrowQuantity }}
+          </p>
+          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"
+            >Return book</a
+          >
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
