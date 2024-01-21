@@ -45,7 +45,7 @@ export class ProfileComponent {
     };
   }
   showEditProfileModal() {
-    // this.editProfileForm.reset();
+    this.editProfileForm.reset();
     this.editProfileErrMessage = '';
     const editProfileModal = document.getElementById(
       'editProfileModal',
