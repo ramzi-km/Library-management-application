@@ -19,6 +19,7 @@ import { ListBooksComponent } from './components/user_components/list-books/list
 import { ListBorrowedBooksComponent } from './components/user_components/list-borrowed-books/list-borrowed-books.component';
 import { ListTransactionsComponent } from './components/admin_components/list-transactions/list-transactions.component';
 import { UserManagementComponent } from './components/admin_components/user-management/user-management.component';
+import { ProfileComponent } from './components/shared_components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { UserManagementComponent } from './components/admin_components/user-mana
     ListBorrowedBooksComponent,
     ListTransactionsComponent,
     UserManagementComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

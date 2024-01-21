@@ -16,6 +16,7 @@ import {
 //---------user-controllers---//
 
 import {
+    editProfile,
     getBorrowedBooks,
     getUserData,
 } from '../controllers/userControllers.js';
@@ -38,6 +39,7 @@ router.post('/logout', verifyUser, logout);
 
 //----------------------user-----------------------//
 router.get('/user', verifyUser, getUserData);
+router.post('/user/editProfile', verifyUser, editProfile);
 
 //----------------------book----------------------//
 router.get('/books', verifyUser, getAllBooks);

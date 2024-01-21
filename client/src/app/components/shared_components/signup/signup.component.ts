@@ -49,7 +49,7 @@ export class SignupComponent implements OnInit {
   noEmptySpacesValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
-      if (value && value.trim().length < 5) {
+      if (value && value.trim().length < 3) {
         return { noEmptySpaces: true };
       }
       return null;

@@ -19,6 +19,33 @@ export async function getUserData(req, res) {
   }
 }
 
+export async function editProfile(req, res) {
+  try {
+    const userId = req.user.id;
+    const { name } = req.body;
+    console.log(name);
+
+    if (!name) {
+      return res.status(400).json({ message: 'Name is required' });
+    }
+
+    const updatedUser = await userModel.findOneAndUpdate(
+      { _id: userId },
+      { $set: { name: name } },
+      { new: true, select: '-password -__v' }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ user: updatedUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+
 export async function getBorrowedBooks(req, res) {
   try {
     const userId = req.user.id;
