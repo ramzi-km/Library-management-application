@@ -17,6 +17,7 @@ import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { BooksManagementComponent } from './components/admin_components/books-management/books-management.component';
 import { ListBooksComponent } from './components/user_components/list-books/list-books.component';
 import { ListBorrowedBooksComponent } from './components/user_components/list-borrowed-books/list-borrowed-books.component';
+import { ListTransactionsComponent } from './components/admin_components/list-transactions/list-transactions.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ListBorrowedBooksComponent } from './components/user_components/list-bo
     BooksManagementComponent,
     ListBooksComponent,
     ListBorrowedBooksComponent,
+    ListTransactionsComponent,
   ],
   imports: [
     BrowserModule,

@@ -32,6 +32,12 @@ export class BookService {
       body,
     );
   }
+  returnBook(transactionId: string) {
+    return this.http.patch<{ returnedTransaction: Transaction }>(
+      `${this.baseUrl}/book/${transactionId}/return`,
+      {},
+    );
+  }
 
   getBorrowedBooks() {
     return this.http.get<{ borrowedBooks: Transaction[] }>(

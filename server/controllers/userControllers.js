@@ -27,15 +27,10 @@ export async function getBorrowedBooks(req, res) {
         userId,
         status: 'borrowed',
       })
-      .populate('bookId')
+      .populate('book')
       .select('-__v');
-    const remappedTransactions = borrowedBooks.map((transaction) => {
-      const transactionObj = transaction.toObject();
-      transactionObj.book = transactionObj.bookId;
-      delete transactionObj.bookId;
-      return transactionObj;
-    });
-    res.status(200).json({ borrowedBooks: remappedTransactions });
+
+    res.status(200).json({ borrowedBooks: borrowedBooks });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Internal Server Error' });

@@ -33,5 +33,22 @@ const transactionSchema = new Schema(
   },
   { timestamps: true }
 );
+transactionSchema.virtual('user', {
+  ref: 'User',
+  localField: 'userId',
+  foreignField: '_id',
+  justOne: true,
+});
+
+transactionSchema.virtual('book', {
+  ref: 'Book',
+  localField: 'bookId',
+  foreignField: '_id',
+  justOne: true,
+});
+
+transactionSchema.set('toJSON', { virtuals: true });
+transactionSchema.set('toObject', { virtuals: true });
+
 
 export default model('Transaction', transactionSchema);

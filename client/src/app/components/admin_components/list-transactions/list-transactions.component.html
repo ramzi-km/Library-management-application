@@ -1,0 +1,102 @@
+<div class="relative p-5">
+  <div class="overflow-x-auto rounded-xl">
+    <div
+      *ngIf="!transactions[0]"
+      class="flex h-20 items-center justify-center bg-secondary text-2xl font-semibold"
+    >
+      No transactions to display
+    </div>
+    <table
+      *ngIf="transactions[0]"
+      class="table border border-textg bg-secondary text-textp"
+    >
+      <!-- head -->
+      <thead>
+        <tr>
+          <th class="font-bold text-textp">N.O</th>
+          <th class="font-bold text-textp">User</th>
+          <th class="font-bold text-textp">Email</th>
+          <th class="font-bold text-textp">Cover</th>
+          <th class="font-bold text-textp">Title</th>
+          <th class="font-bold text-textp">Borrow date</th>
+          <th class="font-bold text-textp">Return Date</th>
+          <th class="font-bold text-textp">Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-container *ngFor="let transaction of transactions; let i = index">
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ transaction.user?.name }}</td>
+            <td>{{ transaction.user?.email }}</td>
+            <td>
+              <div class="avatar w-16">
+                <div class="mask mask-square h-14 w-14">
+                  <img [src]="transaction.book?.coverImage" alt="Avatar" />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div>
+                <div class="font-medium">{{ transaction.book?.title }}</div>
+              </div>
+            </td>
+
+            <td>{{ transaction.borrowDate | date }}</td>
+            <td>{{ (transaction.returnDate | date) ?? "Not returned" }}</td>
+            <td>
+              <button
+                *ngIf="transaction.status == 'borrowed'"
+                class="btn btn-warning btn-sm"
+              >
+                Borrowed
+              </button>
+              <button
+                *ngIf="transaction.status == 'returned'"
+                class="btn btn-sm bg-green-400"
+              >
+                Returned
+              </button>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+      <!-- foot -->
+      <tfoot>
+        <tr>
+          <th>N.O</th>
+          <th>User</th>
+          <th>Email</th>
+          <th>Cover</th>
+          <th>Title</th>
+          <th>Borrow date</th>
+          <th>Return date</th>
+          <th>Status</th>
+        </tr>
+      </tfoot>
+    </table>
+    <!-- <div class="flex items-center justify-center p-5">
+        <div class="join">
+          <button (click)="prevPage()" *ngIf="page > 0" class="btn join-item">
+            «
+          </button>
+          <button class="btn join-item">Page {{ page + 1 }}</button>
+          <button
+            (click)="nextPage()"
+            *ngIf="page < lastPage"
+            class="btn join-item"
+          >
+            »
+          </button>
+        </div>
+      </div> -->
+  </div>
+  <div *ngIf="loading">
+    <div
+      class="absolute inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-60 text-primary"
+    >
+      <span class="loading loading-bars w-20"></span>
+    </div>
+  </div>
+</div>

@@ -8,7 +8,6 @@ import userModel from '../models/userModel.js';
 export async function getAllBooks(req, res) {
   try {
     const books = await bookModel.find().lean();
-    console.log(books);
     res.status(200).json({ books });
   } catch (error) {
     res.status(500).json({ message: 'Internal Server Error' });
@@ -155,6 +154,17 @@ export async function borrowBook(req, res) {
         .status(400)
         .json({ message: 'User has reached borrowing limit' });
     }
+    const existingTransaction = await transactionModel.findOne({
+      userId,
+      bookId,
+      status: 'borrowed',
+    });
+
+    if (existingTransaction) {
+      return res
+        .status(400)
+        .json({ message: 'User has already borrowed this book' });
+    }
     if (borrowQuantity >= book.borrowLimit) {
       return res.status(400).json({
         message: `borrowing limit for this book is ${book.borrowLimit}`,
@@ -176,6 +186,47 @@ export async function borrowBook(req, res) {
     return res.status(200).json({
       message: 'Book borrowed successfully',
       transaction: newTransaction,
+    });
+  } catch (error) {
+    await session.abortTransaction();
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  } finally {
+    session.endSession();
+  }
+}
+
+export async function returnBook(req, res) {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const userId = req.user._id.toString();
+    const transactionId = req.params.transactionId;
+
+    const transaction = await transactionModel.findOne({
+      _id: transactionId,
+      userId: userId,
+      status: 'borrowed',
+    });
+
+    if (!transaction) {
+      return res
+        .status(404)
+        .json({ message: 'Transaction not found or book already returned' });
+    }
+
+    transaction.status = 'returned';
+    transaction.returnDate = new Date();
+    await transaction.save();
+
+    const book = await bookModel.findById(transaction.bookId);
+    book.quantityAvailable += transaction.borrowQuantity;
+    await book.save();
+
+    await session.commitTransaction();
+    return res.status(200).json({
+      message: 'Book returned successfully',
+      returnedTransaction: transaction,
     });
   } catch (error) {
     await session.abortTransaction();

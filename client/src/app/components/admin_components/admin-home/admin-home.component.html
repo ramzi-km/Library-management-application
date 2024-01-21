@@ -1,5 +1,5 @@
 <div class="mt-20"></div>
-<div class="container py-10 sm:mx-auto md:px-32">
+<div class="container min-h-screen py-10 sm:mx-auto md:px-32">
   <div role="tablist" class="tabs-boxed tabs">
     <a
       role="tab"
@@ -23,9 +23,10 @@
       >User management</a
     >
   </div>
-  <div class="p-4">
-    <div class="rounded-lg border-2 border-info p-4">
-      <app-books-management></app-books-management>
-    </div>
-  </div>
+  <ng-container *ngIf="currentTab == 'booksManagement'">
+    <app-books-management></app-books-management>
+  </ng-container>
+  <ng-container *ngIf="currentTab == 'transactions'">
+    <app-list-transactions></app-list-transactions>
+  </ng-container>
 </div>

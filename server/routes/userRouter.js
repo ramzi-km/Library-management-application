@@ -22,7 +22,11 @@ import {
 
 //---------book-controllers---//
 
-import { borrowBook, getAllBooks } from '../controllers/bookControllers.js';
+import {
+    borrowBook,
+    getAllBooks,
+    returnBook,
+} from '../controllers/bookControllers.js';
 import roleCheck from '../middlewares/roleCheck.js';
 
 //-------------------------------------------------------------------------//
@@ -39,5 +43,11 @@ router.get('/user', verifyUser, getUserData);
 router.get('/books', verifyUser, getAllBooks);
 router.get('/books/borrowed', verifyUser, roleCheck('user'), getBorrowedBooks);
 router.post('/book/:bookId/borrow', verifyUser, roleCheck('user'), borrowBook);
+router.patch(
+  '/book/:transactionId/return',
+  verifyUser,
+  roleCheck('user'),
+  returnBook
+);
 
 export default router;
