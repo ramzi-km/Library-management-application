@@ -8,11 +8,17 @@ import verifyUser from '../middlewares/verifyUser.js';
 
 //---------book-controllers---//
 
-import { getAllTransactions } from '../controllers/adminControllers.js';
+import {
+    getAllTransactions,
+    getAllUsers,
+} from '../controllers/adminControllers.js';
 import { addBook, editBook } from '../controllers/bookControllers.js';
 import roleCheck from '../middlewares/roleCheck.js';
 
 //-------------------------------------------------------------------------//
+
+//----------------------book----------------------//
+router.get('/allUsers', verifyUser, roleCheck('admin'), getAllUsers );
 
 //----------------------book----------------------//
 router.post('/book/add', verifyUser, roleCheck('admin'), addBook);

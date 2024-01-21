@@ -18,6 +18,7 @@ import { BooksManagementComponent } from './components/admin_components/books-ma
 import { ListBooksComponent } from './components/user_components/list-books/list-books.component';
 import { ListBorrowedBooksComponent } from './components/user_components/list-borrowed-books/list-borrowed-books.component';
 import { ListTransactionsComponent } from './components/admin_components/list-transactions/list-transactions.component';
+import { UserManagementComponent } from './components/admin_components/user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ListTransactionsComponent } from './components/admin_components/list-tr
     ListBooksComponent,
     ListBorrowedBooksComponent,
     ListTransactionsComponent,
+    UserManagementComponent,
   ],
   imports: [
     BrowserModule,
