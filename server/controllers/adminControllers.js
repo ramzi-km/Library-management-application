@@ -27,3 +27,18 @@ export async function getAllUsers(req, res) {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+export async function getUserTransactions(req, res) {
+  try {
+    const userId = req.params.userId;
+    const transactions = await transactionModel
+      .find({ userId })
+      .populate('user', '-password')
+      .populate('book')
+      .sort({ updatedAt: -1 })
+      .select('-__v');
+    res.status(200).json({ transactions });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}

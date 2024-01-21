@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { Transaction } from 'src/app/interfaces/transaction';
 import { User } from 'src/app/interfaces/user';
 import { AdminService } from 'src/app/services/admin/admin.service';
 
@@ -14,6 +15,9 @@ export class UserManagementComponent {
   loading = true;
   loadUsersErr = '';
   users: User[] = [];
+  currentUser: User | null = null;
+  currentUserTransactions: Transaction[] = [];
+  currUserTransactionsLoading = false;
 
   constructor(private adminService: AdminService) {}
   ngOnInit(): void {
@@ -23,7 +27,6 @@ export class UserManagementComponent {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          console.log(res);
           this.users = res.users;
           this.loadUsersErr = '';
           this.loading = false;
@@ -34,6 +37,35 @@ export class UserManagementComponent {
           this.loading = false;
         },
       });
+  }
+  showViewTransactionsModal(user: User) {
+    this.currentUser = user;
+    this.currUserTransactionsLoading = true;
+    const viewTransactionsModal = document.getElementById(
+      'viewTransactionsModal',
+    ) as HTMLDialogElement;
+    viewTransactionsModal.showModal();
+    this.adminService
+      .getUserTransactions(user._id!)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => {
+          this.currentUserTransactions = res.transactions;
+          this.currUserTransactionsLoading = false;
+        },
+        error: (errMessage) => {
+          console.log(errMessage);
+          this.currUserTransactionsLoading = false;
+        },
+      });
+  }
+  closeViewTransactionsModal() {
+    const viewTransactionsModal = document.getElementById(
+      'viewTransactionsModal',
+    ) as HTMLDialogElement;
+    viewTransactionsModal.close();
+    this.currentUser = null;
+    this.currentUserTransactions = [];
   }
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();

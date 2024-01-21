@@ -19,4 +19,9 @@ export class AdminService {
   getAllUsers() {
     return this.http.get<{ users: User[] }>(`${this.baseUrl}/admin/allUsers`);
   }
+  getUserTransactions(userId: string) {
+    return this.http.get<{ transactions: Transaction[] }>(
+      `${this.baseUrl}/admin/transactions/${userId}`,
+    );
+  }
 }
