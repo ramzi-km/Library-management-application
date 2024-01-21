@@ -12,7 +12,7 @@
       >Search</label
     >
     <div class="relative">
-      <form>
+      <form [formGroup]="searchForm" (ngSubmit)="searchBooks()">
         <div
           class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
         >
@@ -37,6 +37,7 @@
           id="default-search"
           class="block w-full rounded-lg border border-textg bg-secondary p-4 pl-10 text-sm text-textp focus:border-blue-500 focus:ring-blue-500"
           placeholder="Search book title, author..."
+          formControlName="searchText"
         />
         <button
           type="submit"
@@ -118,12 +119,14 @@
         </tr>
       </tfoot>
     </table>
-    <!-- <div class="flex items-center justify-center p-5">
+    <div class="flex items-center justify-center p-5">
       <div class="join">
         <button (click)="prevPage()" *ngIf="page > 0" class="btn join-item">
           «
         </button>
-        <button class="btn join-item">Page {{ page + 1 }}</button>
+        <button *ngIf="lastPage > 0" class="btn join-item">
+          Page {{ page + 1 }}
+        </button>
         <button
           (click)="nextPage()"
           *ngIf="page < lastPage"
@@ -132,7 +135,7 @@
           »
         </button>
       </div>
-    </div> -->
+    </div>
   </div>
   <div *ngIf="loading">
     <div

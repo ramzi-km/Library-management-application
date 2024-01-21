@@ -18,10 +18,34 @@ export async function getAllTransactions(req, res) {
 }
 export async function getAllUsers(req, res) {
   try {
+    let page = Number(req.query.page ?? 0);
+    page = Math.max(page, 0);
+    let search = req.query.searchText ?? '';
+    search = search.trim();
+    const totalUsers = await userModel.countDocuments({
+      $or: [
+        { name: new RegExp(search, 'i') },
+        { email: new RegExp(search, 'i') },
+      ],
+      role: 'user',
+    });
+    const perPage = 8;
+    const lastPage = Math.max(Math.ceil(totalUsers / perPage) - 1, 0);
+    page = Math.min(page, lastPage);
     const users = await userModel
-      .find({ role: 'user' }, { _v: 0, password: 0 })
-      .sort({ createdAt: -1 });
-    res.status(200).json({ users });
+      .find({
+        $or: [
+          { name: new RegExp(search, 'i') },
+          { email: new RegExp(search, 'i') },
+        ],
+        role: 'user',
+      })
+      .skip(page * perPage)
+      .limit(perPage)
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.status(200).json({ users, page, lastPage });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Internal Server Error' });

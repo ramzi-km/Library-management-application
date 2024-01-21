@@ -1,4 +1,6 @@
+import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { Transaction } from 'src/app/interfaces/transaction';
 import { User } from 'src/app/interfaces/user';
@@ -18,8 +20,16 @@ export class UserManagementComponent {
   currentUser: User | null = null;
   currentUserTransactions: Transaction[] = [];
   currUserTransactionsLoading = false;
+  searchForm: FormGroup;
+  searchText = '';
+  page = 0;
+  lastPage = 0;
 
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService) {
+    this.searchForm = new FormGroup({
+      searchText: new FormControl('', [Validators.required]),
+    });
+  }
   ngOnInit(): void {
     this.loading = true;
     this.adminService
@@ -66,6 +76,83 @@ export class UserManagementComponent {
     viewTransactionsModal.close();
     this.currentUser = null;
     this.currentUserTransactions = [];
+  }
+  searchUser() {
+    if (!this.loading) {
+      const formText = this.searchForm.value.searchText.trim();
+      if (formText == this.searchText) {
+        return;
+      }
+      this.searchText = formText;
+      const params = new HttpParams()
+        .set('page', 0)
+        .set('searchText', this.searchText);
+      this.loading = true;
+      console.log(this.searchText);
+
+      this.adminService
+        .getAllUsers(params)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res) => {
+            this.users = res.users;
+            this.loading = false;
+            this.page = res.page;
+            this.lastPage = res.lastPage;
+          },
+          error: (errMessage) => {
+            console.log(errMessage);
+            this.loading = false;
+          },
+        });
+    }
+  }
+
+  nextPage() {
+    if (!this.loading) {
+      const params = new HttpParams()
+        .set('page', this.page + 1)
+        .set('searchText', this.searchText);
+      this.loading = true;
+      this.adminService
+        .getAllUsers(params)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res) => {
+            this.users = res.users;
+            this.loading = false;
+            this.page = res.page;
+            this.lastPage = res.lastPage;
+          },
+          error: (errMessage) => {
+            console.log(errMessage);
+            this.loading = false;
+          },
+        });
+    }
+  }
+  prevPage() {
+    if (!this.loading) {
+      const params = new HttpParams()
+        .set('page', this.page - 1)
+        .set('searchText', this.searchText);
+      this.loading = true;
+      this.adminService
+        .getAllUsers(params)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res) => {
+            this.users = res.users;
+            this.loading = false;
+            this.page = res.page;
+            this.lastPage = res.lastPage;
+          },
+          error: (errMessage) => {
+            console.log(errMessage);
+            this.loading = false;
+          },
+        });
+    }
   }
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();

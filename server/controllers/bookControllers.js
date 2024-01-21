@@ -7,8 +7,33 @@ import userModel from '../models/userModel.js';
 
 export async function getAllBooks(req, res) {
   try {
-    const books = await bookModel.find().lean();
-    res.status(200).json({ books });
+    let page = Number(req.query.page ?? 0);
+    page = Math.max(page, 0);
+    let search = req.query.searchText ?? '';
+    search = search.trim();
+    console.log(search);
+    const totalBooks = await bookModel.countDocuments({
+      $or: [
+        { title: new RegExp(search, 'i') },
+        { author: new RegExp(search, 'i') },
+        { isbn: new RegExp(search, 'i') },
+      ],
+    });
+    const perPage = 8;
+    const lastPage = Math.max(Math.ceil(totalBooks / perPage) - 1, 0);
+    page = Math.min(page, lastPage);
+    const books = await bookModel
+      .find({
+        $or: [
+          { title: new RegExp(search, 'i') },
+          { author: new RegExp(search, 'i') },
+          { isbn: new RegExp(search, 'i') },
+        ],
+      })
+      .skip(page * perPage)
+      .limit(perPage)
+      .lean();
+    res.status(200).json({ books, page, lastPage });
   } catch (error) {
     res.status(500).json({ message: 'Internal Server Error' });
   }
@@ -165,7 +190,7 @@ export async function borrowBook(req, res) {
         .status(400)
         .json({ message: 'User has already borrowed this book' });
     }
-    if (borrowQuantity >= book.borrowLimit) {
+    if (borrowQuantity > book.borrowLimit) {
       return res.status(400).json({
         message: `borrowing limit for this book is ${book.borrowLimit}`,
       });

@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
@@ -19,8 +20,15 @@ export class ListBooksComponent implements OnInit {
   borrowBookErrMessage = '';
   bookToBorrow: Book | null = null;
   borrowBookLoading = false;
+  searchForm: FormGroup;
+  searchText = '';
+  page = 0;
+  lastPage = 0;
 
   constructor(private bookService: BookService) {
+    this.searchForm = new FormGroup({
+      searchText: new FormControl('', [Validators.required]),
+    });
     this.borrowBookForm = new FormGroup({
       borrowQuantity: new FormControl('', [
         Validators.required,
@@ -80,6 +88,82 @@ export class ListBooksComponent implements OnInit {
           this.borrowBookLoading = false;
         },
       });
+  }
+
+  searchBooks() {
+    if (!this.loading) {
+      const formText = this.searchForm.value.searchText.trim();
+      if (formText == this.searchText) {
+        return;
+      }
+      this.searchText = formText;
+      const params = new HttpParams()
+        .set('page', 0)
+        .set('searchText', this.searchText);
+      this.loading = true;
+      this.bookService
+        .getAllBooks(params)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res) => {
+            this.books = res.books;
+            this.loading = false;
+            this.page = res.page;
+            this.lastPage = res.lastPage;
+          },
+          error: (errMessage) => {
+            console.log(errMessage);
+            this.loading = false;
+          },
+        });
+    }
+  }
+
+  nextPage() {
+    if (!this.loading) {
+      const params = new HttpParams()
+        .set('page', this.page + 1)
+        .set('searchText', this.searchText);
+      this.loading = true;
+      this.bookService
+        .getAllBooks(params)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res) => {
+            this.books = res.books;
+            this.loading = false;
+            this.page = res.page;
+            this.lastPage = res.lastPage;
+          },
+          error: (errMessage) => {
+            console.log(errMessage);
+            this.loading = false;
+          },
+        });
+    }
+  }
+  prevPage() {
+    if (!this.loading) {
+      const params = new HttpParams()
+        .set('page', this.page - 1)
+        .set('searchText', this.searchText);
+      this.loading = true;
+      this.bookService
+        .getAllBooks(params)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res) => {
+            this.books = res.books;
+            this.loading = false;
+            this.page = res.page;
+            this.lastPage = res.lastPage;
+          },
+          error: (errMessage) => {
+            console.log(errMessage);
+            this.loading = false;
+          },
+        });
+    }
   }
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();

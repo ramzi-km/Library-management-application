@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Book } from 'src/app/interfaces/book';
 import { Transaction } from 'src/app/interfaces/transaction';
@@ -10,8 +10,11 @@ import { environment } from 'src/environments/environment';
 export class BookService {
   constructor(private http: HttpClient) {}
   private baseUrl = environment.API_URL;
-  getAllBooks() {
-    return this.http.get<{ books: Book[] }>(`${this.baseUrl}/books`);
+  getAllBooks(params?: HttpParams) {
+    return this.http.get<{ books: Book[]; page: number; lastPage: number }>(
+      `${this.baseUrl}/books`,
+      { params },
+    );
   }
   addBook(book: Book) {
     return this.http.post<{ book: Book }>(

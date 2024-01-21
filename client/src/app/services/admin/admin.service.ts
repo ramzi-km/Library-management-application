@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Transaction } from 'src/app/interfaces/transaction';
 import { User } from 'src/app/interfaces/user';
@@ -16,8 +16,11 @@ export class AdminService {
       `${this.baseUrl}/admin/transactions`,
     );
   }
-  getAllUsers() {
-    return this.http.get<{ users: User[] }>(`${this.baseUrl}/admin/allUsers`);
+  getAllUsers(params?: HttpParams) {
+    return this.http.get<{ users: User[]; page: number; lastPage: number }>(
+      `${this.baseUrl}/admin/allUsers`,
+      { params },
+    );
   }
   getUserTransactions(userId: string) {
     return this.http.get<{ transactions: Transaction[] }>(

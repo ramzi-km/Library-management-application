@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -27,8 +28,15 @@ export class BooksManagementComponent implements OnInit, OnDestroy {
   editBookLoading = false;
   editingBookId = '';
   books: Book[] = [];
+  searchForm: FormGroup;
+  searchText = '';
+  page = 0;
+  lastPage = 0;
 
   constructor(private bookService: BookService) {
+    this.searchForm = new FormGroup({
+      searchText: new FormControl('', [Validators.required]),
+    });
     this.addBookForm = new FormGroup({
       title: new FormControl('', [
         Validators.required,
@@ -109,6 +117,8 @@ export class BooksManagementComponent implements OnInit, OnDestroy {
         next: (res) => {
           this.books = res.books;
           this.loadBooksErr = '';
+          this.page = res.page;
+          this.lastPage = res.lastPage;
           this.loading = false;
         },
         error: (errMessage) => {
@@ -218,6 +228,82 @@ export class BooksManagementComponent implements OnInit, OnDestroy {
         });
       };
       reader.readAsDataURL(file);
+    }
+  }
+
+  searchBooks() {
+    if (!this.loading) {
+      const formText = this.searchForm.value.searchText.trim();
+      if (formText == this.searchText) {
+        return;
+      }
+      this.searchText = formText;
+      const params = new HttpParams()
+        .set('page', 0)
+        .set('searchText', this.searchText);
+      this.loading = true;
+      this.bookService
+        .getAllBooks(params)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res) => {
+            this.books = res.books;
+            this.loading = false;
+            this.page = res.page;
+            this.lastPage = res.lastPage;
+          },
+          error: (errMessage) => {
+            console.log(errMessage);
+            this.loading = false;
+          },
+        });
+    }
+  }
+
+  nextPage() {
+    if (!this.loading) {
+      const params = new HttpParams()
+        .set('page', this.page + 1)
+        .set('searchText', this.searchText);
+      this.loading = true;
+      this.bookService
+        .getAllBooks(params)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res) => {
+            this.books = res.books;
+            this.loading = false;
+            this.page = res.page;
+            this.lastPage = res.lastPage;
+          },
+          error: (errMessage) => {
+            console.log(errMessage);
+            this.loading = false;
+          },
+        });
+    }
+  }
+  prevPage() {
+    if (!this.loading) {
+      const params = new HttpParams()
+        .set('page', this.page - 1)
+        .set('searchText', this.searchText);
+      this.loading = true;
+      this.bookService
+        .getAllBooks(params)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res) => {
+            this.books = res.books;
+            this.loading = false;
+            this.page = res.page;
+            this.lastPage = res.lastPage;
+          },
+          error: (errMessage) => {
+            console.log(errMessage);
+            this.loading = false;
+          },
+        });
     }
   }
   ngOnDestroy(): void {
