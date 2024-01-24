@@ -165,7 +165,7 @@ export async function borrowBook(req, res) {
     if (!book) {
       return res.status(404).json({ message: 'Book not found' });
     }
-    if (book.quantityAvailable <= 0) {
+    if (book.quantityAvailable <= 2) {
       return res
         .status(400)
         .json({ message: 'Book is not currently available for borrowing' });
@@ -174,7 +174,7 @@ export async function borrowBook(req, res) {
       _id: userId,
       status: 'borrowed',
     });
-    if (userBorrowCount >= 5) {
+    if (userBorrowCount >= 3) {
       return res
         .status(400)
         .json({ message: 'User has reached borrowing limit' });
