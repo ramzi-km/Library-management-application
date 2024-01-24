@@ -44,6 +44,9 @@ export class ListBooksComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.books = res.books;
+          console.log(this.books);
+          this.page=res.page
+          this.lastPage=res.lastPage
           this.loadBooksErr = '';
           this.loading = false;
         },
